@@ -52,7 +52,6 @@ class Game:
         self.screen.fill((255, 255, 255))
         self.draw_background()
 
-
         # dibujamos el objeto en pantalla
         self.screen.blit(self.spaceship.image, self.spaceship.image_rect)
 
