@@ -1,10 +1,8 @@
 import pygame
-from game.utils.constants import BG, ICON, SCREEN_HEIGHT, SCREEN_WIDTH, TITLE, FPS, DEFAULT_TYPE, \
-    ALL_SPRITES, GROUP_SPACESHIP, GROUP_BULLETS, GROUP_BULLETS_ENEMYS, GROUP_ENEMYS
-
+from game.utils.constants import BG, ICON, SCREEN_HEIGHT, SCREEN_WIDTH, TITLE, FPS, ALL_SPRITES, GROUP_SPACESHIP
 from game.components.spaceship import SpaceShip
 from game.components.enemy import Enemy
-from game.components.enemy_control import Enemy_control
+from game.components.control import Control
 
 # Game tiene un "Spaceship" - Por lo general esto es iniciliazar un objeto Spaceship en el __init__
 class Game:
@@ -23,7 +21,7 @@ class Game:
         self.spaceship = SpaceShip()
         GROUP_SPACESHIP.add(self.spaceship)
         ALL_SPRITES.add(self.spaceship)
-        self.enemy_control = Enemy_control()
+        self.control = Control()
 
     def run(self):
         # Game loop: events - update - draw
@@ -45,15 +43,16 @@ class Game:
             # si el "event" type es igual a pygame.QUIT entonces cambiamos playing a False
             if event.type == pygame.QUIT:
                 self.playing = False
-
-        self.enemy_control.add_enemys()
+        # control de colisiones
+        self.control.control_collide_enemy()
+        self.playing = self.control.control_collide_player()
+        self.control.count_time(self.playing)
 
     def update(self):
-        # pass
         self.spaceship.update()
-        self.enemy_control.update(self.spaceship.rect.x)
-        pygame.sprite.groupcollide(GROUP_BULLETS, GROUP_ENEMYS, True, True)
-        pygame.sprite.groupcollide(GROUP_BULLETS_ENEMYS, GROUP_SPACESHIP, True, True)
+        self.control.update(self.spaceship.rect.x)
+        self.control.add_enemys_time()
+        
 
     def draw(self):
         self.clock.tick(FPS)

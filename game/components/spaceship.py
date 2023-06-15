@@ -3,14 +3,6 @@ from pygame.sprite import Sprite
 from game.components.bullet import Bullet
 from game.utils.constants import SPACESHIP, SCREEN_HEIGHT, SCREEN_WIDTH, SPEED, IMAGE_SIZE, ALL_SPRITES, GROUP_BULLETS
 
-# casi Todo en pygame es un objeto
-# Un personaje en mi juego es un objeto (instancia de algo)
-# La nave (spaceship) es un personaje => necesito una clase
-
-
-# SpaceShip es una clase derivada (hija) de Sprite
-
-# spaceship tiene una "imagen"
 class SpaceShip(Sprite):
     
     def __init__(self):
@@ -42,7 +34,7 @@ class SpaceShip(Sprite):
         elif self.rect.x < 0:
             self.rect.x = SCREEN_WIDTH - IMAGE_SIZE[0]
 
-    def shoot_bullet(self):
+    def shoot_bullet(self): # genera disparo
         keys = pygame.key.get_pressed()
         self.count += 1
         if keys[pygame.K_SPACE] and self.count >= 10:
@@ -52,9 +44,3 @@ class SpaceShip(Sprite):
             self.count = 0
             GROUP_BULLETS.add(bullet)
             ALL_SPRITES.add(bullet)
-
-    def deat(self):
-        self.kill()
-
-
-
