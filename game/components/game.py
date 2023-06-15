@@ -20,7 +20,7 @@ class Game:
 
         # Game tiene un "Spaceship" y un "Enemy"
         self.spaceship = SpaceShip()
-        self.enemy = Enemy(random.randint(0,SCREEN_WIDTH))
+        self.enemy = Enemy(random.randint(0, SCREEN_WIDTH))
 
     def run(self):
         # Game loop: events - update - draw
