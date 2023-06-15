@@ -1,5 +1,5 @@
 import pygame
-
+import random
 from game.utils.constants import BG, ICON, SCREEN_HEIGHT, SCREEN_WIDTH, TITLE, FPS, DEFAULT_TYPE
 
 from game.components.spaceship import SpaceShip
@@ -20,7 +20,7 @@ class Game:
 
         # Game tiene un "Spaceship" y un "Enemy"
         self.spaceship = SpaceShip()
-        self.enemy = Enemy()
+        self.enemy = Enemy(random.randint(0,SCREEN_WIDTH))
 
     def run(self):
         # Game loop: events - update - draw
