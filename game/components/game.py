@@ -1,9 +1,10 @@
 import pygame
-import random
-from game.utils.constants import BG, ICON, SCREEN_HEIGHT, SCREEN_WIDTH, TITLE, FPS, DEFAULT_TYPE
+from game.utils.constants import BG, ICON, SCREEN_HEIGHT, SCREEN_WIDTH, TITLE, FPS, DEFAULT_TYPE, \
+    ALL_SPRITES, GROUP_SPACESHIP, GROUP_BULLETS, GROUP_BULLETS_ENEMYS, GROUP_ENEMYS
 
 from game.components.spaceship import SpaceShip
 from game.components.enemy import Enemy
+from game.components.enemy_control import Enemy_control
 
 # Game tiene un "Spaceship" - Por lo general esto es iniciliazar un objeto Spaceship en el __init__
 class Game:
@@ -20,7 +21,9 @@ class Game:
 
         # Game tiene un "Spaceship" y un "Enemy"
         self.spaceship = SpaceShip()
-        self.enemy = Enemy(random.randint(0, SCREEN_WIDTH))
+        GROUP_SPACESHIP.add(self.spaceship)
+        ALL_SPRITES.add(self.spaceship)
+        self.enemy_control = Enemy_control()
 
     def run(self):
         # Game loop: events - update - draw
@@ -43,21 +46,22 @@ class Game:
             if event.type == pygame.QUIT:
                 self.playing = False
 
+        self.enemy_control.add_enemys()
+
     def update(self):
         # pass
         self.spaceship.update()
-        self.enemy.update(self.spaceship.image_rect.x)
+        self.enemy_control.update(self.spaceship.rect.x)
+        pygame.sprite.groupcollide(GROUP_BULLETS, GROUP_ENEMYS, True, True)
+        pygame.sprite.groupcollide(GROUP_BULLETS_ENEMYS, GROUP_SPACESHIP, True, True)
 
     def draw(self):
         self.clock.tick(FPS)
         self.screen.fill((255, 255, 255))
         self.draw_background()
 
-        # dibujamos el objeto en pantalla
-        self.screen.blit(self.spaceship.image, self.spaceship.image_rect)
-
-        # dibujamos el objeto enemigo
-        self.screen.blit(self.enemy.image, self.enemy.image_rect)
+        # dibujamos todos los objetos o sprites en pantalla
+        ALL_SPRITES.draw(self.screen)
 
         pygame.display.update()
         pygame.display.flip()
