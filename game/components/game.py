@@ -1,7 +1,6 @@
 import pygame
 from game.utils.constants import BG, ICON, SCREEN_HEIGHT, SCREEN_WIDTH, TITLE, FPS, ALL_SPRITES, GROUP_SPACESHIP
 from game.components.spaceship import SpaceShip
-from game.components.enemy import Enemy
 from game.components.control import Control
 
 # Game tiene un "Spaceship" - Por lo general esto es iniciliazar un objeto Spaceship en el __init__
@@ -16,6 +15,7 @@ class Game:
         self.game_speed = 10
         self.x_pos_bg = 0
         self.y_pos_bg = 0
+        self.pause = False
 
         # Game tiene un "Spaceship" y un "Enemy"
         self.spaceship = SpaceShip()
@@ -38,15 +38,17 @@ class Game:
         pygame.quit()
 
     def handle_events(self):
+        self.spaceship.move() # capturar eventos del teclado para el movimiento
+        # control de colisiones
+        self.control.control_collide_enemy()
+        self.pause = self.control.control_collide_player(self.screen)
+        self.control.count_time(self.playing)
+
         # Para un "event" (es un elemento) en la lista (secuencia) que me retorna el metodo get()
         for event in pygame.event.get():
             # si el "event" type es igual a pygame.QUIT entonces cambiamos playing a False
             if event.type == pygame.QUIT:
                 self.playing = False
-        # control de colisiones
-        self.control.control_collide_enemy()
-        self.playing = self.control.control_collide_player()
-        self.control.count_time(self.playing)
 
     def update(self):
         self.spaceship.update()
@@ -74,3 +76,4 @@ class Game:
             self.screen.blit(image, (self.x_pos_bg, self.y_pos_bg - image_height))
             self.y_pos_bg = 0
         self.y_pos_bg += self.game_speed
+
