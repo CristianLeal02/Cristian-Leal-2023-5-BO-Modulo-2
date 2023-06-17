@@ -1,6 +1,6 @@
 import pygame
 from pygame.sprite import Sprite
-from game.utils.constants import BULLET, BULLET_ENEMY, SPEED_BULLET, BULLET_SIZE
+from game.utils.constants import BULLET, BULLET_ENEMY, SPEED_BULLET, BULLET_SIZE, SCREEN_HEIGHT
 
 class Bullet(Sprite):
     
@@ -21,7 +21,9 @@ class Bullet(Sprite):
 
     def update(self):
         self.move_bullet
-        if self.rect.y < 0:
+        if self.ship_type == 1 and self.rect.y < 0:
+            self.kill()
+        elif self.rect.y < SCREEN_HEIGHT:
             self.kill()
 
     def move_bullet(self): # movimiento de las balas

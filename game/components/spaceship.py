@@ -12,7 +12,7 @@ class SpaceShip(Sprite):
         self.rect.x = (SCREEN_WIDTH / 2) - (IMAGE_SIZE[0] / 2)
         self.rect.y = SCREEN_HEIGHT - IMAGE_SIZE[1] - 20
         self.bullets = []
-        self.count = 0
+        self.count_updates = 0
 
     def update(self):
         self.control_out_screen()
@@ -35,11 +35,11 @@ class SpaceShip(Sprite):
 
     def shoot_bullet(self): # genera disparo
         keys = pygame.key.get_pressed()
-        self.count += 1
-        if keys[pygame.K_SPACE] and self.count >= 10 and self.alive():
+        self.count_updates += 1
+        if keys[pygame.K_SPACE] and self.count_updates >= 10 and self.alive():
             point_x = self.rect.x + (IMAGE_SIZE[0] / 2.7)
             bullet = Bullet(1, point_x, (SCREEN_HEIGHT - IMAGE_SIZE[1] - 20), None)
             self.bullets.append(bullet)
-            self.count = 0
+            self.count_updates = 0
             GROUP_BULLETS.add(bullet)
             ALL_SPRITES.add(bullet)

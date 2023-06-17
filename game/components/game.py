@@ -15,7 +15,6 @@ class Game:
         self.game_speed = 10
         self.x_pos_bg = 0
         self.y_pos_bg = 0
-        self.pause = False
 
         # Game tiene un "Spaceship" y un "Enemy"
         self.spaceship = SpaceShip()
@@ -41,8 +40,7 @@ class Game:
         self.spaceship.move() # capturar eventos del teclado para el movimiento
         # control de colisiones
         self.control.control_collide_enemy()
-        self.pause = self.control.control_collide_player(self.screen)
-        self.control.count_time(self.playing)
+        self.control.control_collide_player(self.screen)
 
         # Para un "event" (es un elemento) en la lista (secuencia) que me retorna el metodo get()
         for event in pygame.event.get():
@@ -54,12 +52,14 @@ class Game:
         self.spaceship.update()
         self.control.update(self.spaceship.rect.x)
         self.control.add_enemys_time()
-        
+        self.control.count_time()
+        self.spaceship.kill() if self.control.count_lives == 0 else None
 
     def draw(self):
         self.clock.tick(FPS)
         self.screen.fill((255, 255, 255))
         self.draw_background()
+        self.control.count_kills(self.screen)
 
         # dibujamos todos los objetos o sprites en pantalla
         ALL_SPRITES.draw(self.screen)

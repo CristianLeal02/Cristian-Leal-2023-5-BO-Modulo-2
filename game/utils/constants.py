@@ -1,12 +1,14 @@
 import pygame
 import os
 
-# Global Constants
+# Constants group sprites
 ALL_SPRITES = pygame.sprite.Group()
 GROUP_SPACESHIP = pygame.sprite.Group()
 GROUP_ENEMYS = pygame.sprite.Group()
 GROUP_BULLETS = pygame.sprite.Group()
 GROUP_BULLETS_ENEMYS = pygame.sprite.Group()
+
+# Global Constants
 TITLE = "Spaceships Game"
 SCREEN_HEIGHT = 600
 SCREEN_WIDTH = 1100
@@ -16,7 +18,7 @@ SPEED_X_ENEMY = (7,5)
 SPEED_BULLET = 15
 IMAGE_SIZE = (40, 60)
 BULLET_SIZE = (10, 20)
-GAME_OVER_SIZE = (500, 100)
+GAME_OVER_SIZE = (600, 90)
 IMG_DIR = os.path.join(os.path.dirname(__file__), "..", "assets")
 
 # Assets Constants

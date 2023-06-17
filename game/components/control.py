@@ -1,18 +1,19 @@
 from game.components.enemy import Enemy
 import random, pygame
 from game.utils.constants import SCREEN_WIDTH, ALL_SPRITES, GROUP_ENEMYS, GROUP_SPACESHIP,  \
-    GROUP_BULLETS, GROUP_BULLETS_ENEMYS, ALL_SPRITES, GROUP_BULLETS_ENEMYS
-from game.components.items import Game_over
+    GROUP_BULLETS, GROUP_BULLETS_ENEMYS, ALL_SPRITES, GROUP_BULLETS_ENEMYS, BG, FONT_STYLE
+from game.components.game_over import Game_over
 
 class Control:
     def __init__(self):
-        self.count = 0
+        self.count_updates = 0
         self.enemys = []
         self.timer = 0
         self.add_enemys_init()
-        self.end = False
-        self.group_game_over = pygame.sprite.Group()
         self.playing = True
+        self.flag = True
+        self.count_kill = 0
+        self.count_lives = 5
 
     def add_enemys_init(self):
         for i in range(3):
@@ -22,9 +23,9 @@ class Control:
             ALL_SPRITES.add(enemy)
 
     def add_enemys_time(self): # agrega enemigos cada cierto tiempo
-        self.count += 1
-        if self.count > 300 and self.playing:
-            self.count = 0
+        self.count_updates += 1
+        if self.count_updates > 300 and self.playing:
+            self.count_updates = 0
             enemy = Enemy(random.randint(0, SCREEN_WIDTH))
             self.enemys.append(enemy)
             GROUP_ENEMYS.add(enemy)
@@ -39,12 +40,21 @@ class Control:
 
     def control_collide_enemy(self): # controla las coliciones entre balas y enemigos
         collide_enemy = pygame.sprite.groupcollide(GROUP_BULLETS, GROUP_ENEMYS, True, True)
-        self.respawn_enemy() if collide_enemy else None
+        if collide_enemy:
+            self.respawn_enemy()
+            self.count_kill += 1
+        else: None
         
     def control_collide_player(self, screen): # controla las coliciones entre el jugardor, las balas y los enemigos
-        collide_player = pygame.sprite.groupcollide(GROUP_ENEMYS, GROUP_SPACESHIP, True, True)
-        collide_player_2 = pygame.sprite.groupcollide(GROUP_BULLETS_ENEMYS, GROUP_SPACESHIP, True, True)
-        self.game_over(screen) if (collide_player or collide_player_2) else True
+        collide_player = pygame.sprite.groupcollide(GROUP_ENEMYS, GROUP_SPACESHIP, True, False)
+        collide_player_2 = pygame.sprite.groupcollide(GROUP_BULLETS_ENEMYS, GROUP_SPACESHIP, True, False)
+        if collide_player:
+            self.count_lives -= 1 
+            self.respawn_enemy()
+            self.game_over(screen)
+        elif collide_player_2:
+            self.count_lives -= 1 
+            self.game_over(screen)
 
     def respawn_enemy(self): # crea un enemigo nuevo
         if self.playing:
@@ -53,16 +63,23 @@ class Control:
             GROUP_ENEMYS.add(enemy)
             ALL_SPRITES.add(enemy)
 
-    def count_time(self, flag): # cuenta el tiempo jugado
+    def count_time(self): # cuenta el tiempo jugado
         self.timer += 1
-        None if flag else print(f'Tiempo jugado: {self.timer/30}')
+        if not self.flag:
+            print(f'Tiempo jugado: {self.timer/30} segundos')
+            self.flag = True
 
     def game_over(self, screen):
-        game_over = Game_over()
-        ALL_SPRITES.remove()
-        GROUP_BULLETS_ENEMYS.remove()
-        self.group_game_over.add(game_over)
-        ALL_SPRITES.add(game_over)
-        self.playing = False
-        return True
+        if self.count_lives == 0:
+            game_over = Game_over(screen)
+            ALL_SPRITES.add(game_over)
+            self.playing = False
+            self.flag = False
+            self.count_time()
 
+    def count_kills(self, screen):
+        font = pygame.font.SysFont(FONT_STYLE, 30)
+        text_kill = font.render(f"Kills: {self.count_kill}", True, (0, 255, 255))
+        text_kill_rect = text_kill.get_rect()
+        text_kill_rect.center = (50, 20)
+        screen.blit(text_kill, text_kill_rect)
