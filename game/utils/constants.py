@@ -16,9 +16,14 @@ FPS = 30
 SPEED = 8
 SPEED_X_ENEMY = (7,5)
 SPEED_BULLET = 15
+
+# Sizes Constants
 IMAGE_SIZE = (40, 60)
 BULLET_SIZE = (10, 20)
 GAME_OVER_SIZE = (600, 90)
+HEART_SIZE = (30, 30)
+RESET_SIZE = (60, 80)
+
 IMG_DIR = os.path.join(os.path.dirname(__file__), "..", "assets")
 
 # Assets Constants
@@ -31,6 +36,8 @@ BG = pygame.image.load(os.path.join(IMG_DIR, 'Other/Track.png'))
 HEART = pygame.image.load(os.path.join(IMG_DIR, 'Other/SmallHeart.png'))
 
 GAME_OVER = pygame.image.load(os.path.join(IMG_DIR, 'Other/GameOver.png'))
+
+RESET = pygame.image.load(os.path.join(IMG_DIR, 'Other/Reset.png'))
 
 DEFAULT_TYPE = "default"
 SHIELD_TYPE = 'shield'

@@ -1,7 +1,8 @@
 import pygame, random
 from pygame.sprite import Sprite
 from game.components.bullet import Bullet
-from game.utils.constants import ENEMY_1, ENEMY_2, SCREEN_HEIGHT, SCREEN_WIDTH, IMAGE_SIZE, GROUP_BULLETS_ENEMYS, ALL_SPRITES
+from game.utils.constants import ENEMY_1, ENEMY_2, SCREEN_HEIGHT, SCREEN_WIDTH, \
+                                IMAGE_SIZE, GROUP_BULLETS_ENEMYS, ALL_SPRITES
 
 class Enemy(Sprite):
     
@@ -73,7 +74,7 @@ class Enemy(Sprite):
             if self.type_enemy <= 2:
                 self.rect.x = random.randint(0,SCREEN_WIDTH)
 
-    def shoot_bullet(self):
+    def shoot_bullet(self): # disparos enemigos
         self.count_updates_2 += 1
         if self.count_updates_2 == 35 and self.alive():
             point_x = self.rect.x + (IMAGE_SIZE[0] / 2.7)

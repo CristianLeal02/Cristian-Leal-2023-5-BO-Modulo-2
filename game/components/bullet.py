@@ -13,7 +13,7 @@ class Bullet(Sprite):
         self.rect.x = rect_x
         self.rect.y = rect_y
 
-    def shoot_type(self, ship_type): # puede implementarse para que los enemigos disparen
+    def shoot_type(self, ship_type): # selecciona el tipo de disparo
         if ship_type == 1:
             self.image = pygame.transform.scale(BULLET, BULLET_SIZE)
         elif ship_type == 2 and self.flag:
